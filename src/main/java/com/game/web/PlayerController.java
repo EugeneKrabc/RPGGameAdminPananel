@@ -4,13 +4,16 @@ import com.game.entity.enums.Profession;
 import com.game.entity.enums.Race;
 import com.game.mapper.PlayerMapper;
 import com.game.service.PlayerService;
+import com.game.web.request.UrlParams;
 import com.game.web.response.PlayerResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/rest/players")
 public class PlayerController {
@@ -25,9 +28,13 @@ public class PlayerController {
     }
 
     @GetMapping
-    public List<PlayerResponse> getPlayersList() {
+    public List<PlayerResponse> getPlayersList(UrlParams urlParams) {
+        log.info("Get layer receive urlParams: {}", urlParams);
+
         return playerService.getAllPlayers().stream()
                 .map(playerMapper::playerToPlayerResponse)
+                .skip((long) urlParams.getPageSize() * urlParams.getPageNumber())
+                .limit(urlParams.getPageSize())
                 .collect(Collectors.toList());
     }
 
