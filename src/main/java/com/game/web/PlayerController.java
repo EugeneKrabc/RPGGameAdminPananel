@@ -7,16 +7,19 @@ import com.game.service.PlayerService;
 import com.game.web.request.UrlParams;
 import com.game.web.response.PlayerResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
 @RequestMapping(value = "/rest/players")
 public class PlayerController {
+
+    private static final Logger LOGGER = Logger.getLogger("Logger");
 
     private final PlayerService playerService;
 
@@ -29,12 +32,11 @@ public class PlayerController {
 
     @GetMapping
     public List<PlayerResponse> getPlayersList(UrlParams urlParams) {
-        log.info("Get layer receive urlParams: {}", urlParams);
-
         return playerService.getAllPlayers().stream()
                 .map(playerMapper::playerToPlayerResponse)
                 .skip((long) urlParams.getPageSize() * urlParams.getPageNumber())
                 .limit(urlParams.getPageSize())
+                .peek(playerResponse ->LOGGER.log(Level.WARNING, playerResponse.toString()))
                 .collect(Collectors.toList());
     }
 
