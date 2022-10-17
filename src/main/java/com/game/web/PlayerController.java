@@ -9,6 +9,7 @@ import com.game.web.response.PlayerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +37,11 @@ public class PlayerController {
                 .map(playerMapper::playerToPlayerResponse)
                 .skip((long) urlParams.getPageSize() * urlParams.getPageNumber())
                 .limit(urlParams.getPageSize())
-                .peek(playerResponse ->LOGGER.log(Level.WARNING, playerResponse.toString()))
+                .peek(playerResponse -> {
+                    byte[] text = playerResponse.getName().getBytes(StandardCharsets.UTF_8);
+                    String value = new String(text, StandardCharsets.UTF_8);
+                    LOGGER.log(Level.WARNING, value);
+                })
                 .collect(Collectors.toList());
     }
 
