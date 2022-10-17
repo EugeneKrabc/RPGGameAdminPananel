@@ -34,6 +34,5 @@ public class UrlParams {
 
     Integer pageSize = 3;
 
-    PlayerOrder playerOrder;
-
+    PlayerOrder order;
 }

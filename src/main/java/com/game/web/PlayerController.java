@@ -9,7 +9,6 @@ import com.game.web.response.PlayerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,15 +32,22 @@ public class PlayerController {
 
     @GetMapping
     public List<PlayerResponse> getPlayersList(UrlParams urlParams) {
+        LOGGER.log(Level.INFO,"URL Params: " + urlParams.toString());
         return playerService.getAllPlayers().stream()
                 .map(playerMapper::playerToPlayerResponse)
+                .sorted((p1, p2) -> {
+                    if (urlParams.getOrder() == PlayerOrder.NAME) {
+                        return String.CASE_INSENSITIVE_ORDER.compare(p1.getName(), p2.getName());
+                    } else if (urlParams.getOrder() == PlayerOrder.EXPERIENCE) {
+                        return Long.compare(p1.getExperience(), p2.getExperience());
+                    } else if (urlParams.getOrder() == PlayerOrder.BIRTHDAY) {
+                        return (p1.getBirthday().compareTo(p2.getBirthday()));
+                    } else {
+                        return Long.compare(p1.getId(), p2.getId());
+                    }
+                })
                 .skip((long) urlParams.getPageSize() * urlParams.getPageNumber())
                 .limit(urlParams.getPageSize())
-                .peek(playerResponse -> {
-                    byte[] text = playerResponse.getName().getBytes(StandardCharsets.UTF_8);
-                    String value = new String(text, StandardCharsets.UTF_8);
-                    LOGGER.log(Level.WARNING, value);
-                })
                 .collect(Collectors.toList());
     }
 

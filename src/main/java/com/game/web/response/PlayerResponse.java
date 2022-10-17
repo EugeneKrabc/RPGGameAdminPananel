@@ -4,6 +4,8 @@ import com.game.entity.enums.Profession;
 import com.game.entity.enums.Race;
 import lombok.Data;
 
+import java.util.Date;
+
 
 @Data
 public class PlayerResponse {
@@ -16,6 +18,8 @@ public class PlayerResponse {
     Race race;
 
     Profession profession;
+
+    Date birthday;
 
     int experience;
 
