@@ -9,7 +9,9 @@ import com.game.web.response.PlayerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -33,7 +35,7 @@ public class PlayerController {
     @GetMapping
     public List<PlayerResponse> getPlayersList(UrlParams urlParams) {
         LOGGER.log(Level.INFO,"URL Params: " + urlParams.toString());
-        return playerService.getAllPlayers().stream()
+        return playerService.getAllPlayers(urlParams).stream()
                 .map(playerMapper::playerToPlayerResponse)
                 .sorted((p1, p2) -> {
                     if (urlParams.getOrder() == PlayerOrder.NAME) {
@@ -71,7 +73,7 @@ public class PlayerController {
         return mockPlayer();
     }
 
-
+    private Comparator<PlayerResponse>  idComparator = (p1, p2) -> 0;
 
     private PlayerResponse mockPlayer() {
         PlayerResponse mock = new PlayerResponse();
