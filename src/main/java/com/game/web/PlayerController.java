@@ -34,22 +34,10 @@ public class PlayerController {
 
     @GetMapping
     public List<PlayerResponse> getPlayersList(UrlParams urlParams) {
-        LOGGER.log(Level.INFO,"URL Params: " + urlParams.toString());
+        LOGGER.log(Level.INFO,"Receive Get player list request, URL Params: " + urlParams.toString());
+
         return playerService.getAllPlayers(urlParams).stream()
                 .map(playerMapper::playerToPlayerResponse)
-                .sorted((p1, p2) -> {
-                    if (urlParams.getOrder() == PlayerOrder.NAME) {
-                        return String.CASE_INSENSITIVE_ORDER.compare(p1.getName(), p2.getName());
-                    } else if (urlParams.getOrder() == PlayerOrder.EXPERIENCE) {
-                        return Long.compare(p1.getExperience(), p2.getExperience());
-                    } else if (urlParams.getOrder() == PlayerOrder.BIRTHDAY) {
-                        return (p1.getBirthday().compareTo(p2.getBirthday()));
-                    } else {
-                        return Long.compare(p1.getId(), p2.getId());
-                    }
-                })
-                .skip((long) urlParams.getPageSize() * urlParams.getPageNumber())
-                .limit(urlParams.getPageSize())
                 .collect(Collectors.toList());
     }
 

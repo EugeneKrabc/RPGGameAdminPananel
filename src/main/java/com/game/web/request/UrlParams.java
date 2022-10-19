@@ -5,6 +5,8 @@ import com.game.entity.enums.Race;
 import com.game.web.PlayerOrder;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class UrlParams {
 
