@@ -51,6 +51,18 @@ public class PlayerServiceImpl implements PlayerService {
                     if (isCorresponds && urlParams.getBanned() != null) {
                         isCorresponds = urlParams.getBanned() == player.isBanned();
                     }
+                    if (isCorresponds && urlParams.getMinExperience() != null) {
+                        isCorresponds = player.getExperience() >= urlParams.getMinExperience();
+                    }
+                    if (isCorresponds && urlParams.getMaxExperience() != null) {
+                        isCorresponds = player.getExperience() <= urlParams.getMaxExperience();
+                    }
+                    if (isCorresponds && urlParams.getMinLevel() != null) {
+                        isCorresponds = player.getLevel() >= urlParams.getMinLevel();
+                    }
+                    if (isCorresponds && urlParams.getMaxLevel() != null) {
+                        isCorresponds = player.getLevel() <= urlParams.getMaxLevel();
+                    }
                     return  isCorresponds;
                 })
                 .sorted((p1, p2) -> {
