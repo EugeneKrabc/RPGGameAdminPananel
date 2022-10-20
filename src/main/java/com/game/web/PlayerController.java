@@ -4,20 +4,25 @@ import com.game.entity.enums.Profession;
 import com.game.entity.enums.Race;
 import com.game.mapper.PlayerMapper;
 import com.game.service.PlayerService;
+import com.game.web.request.PlayerCreateRequest;
 import com.game.web.request.UrlParams;
 import com.game.web.response.PlayerResponse;
+
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
+@Validated
 @RequestMapping(value = "/rest/players")
 public class PlayerController {
 
@@ -42,8 +47,8 @@ public class PlayerController {
     }
 
     @GetMapping("/count")
-    public long getPlayersCount() {
-        return playerService.getPlayersCount();
+    public long getPlayersCount(UrlParams urlParams) {
+        return playerService.getPlayersCount(urlParams);
     }
 
     @GetMapping("/{id}")
@@ -52,7 +57,10 @@ public class PlayerController {
     }
 
     @PostMapping
-    public PlayerResponse createPlayer() {
+    public PlayerResponse createPlayer(@RequestBody @Valid PlayerCreateRequest playerCreateRequest,
+                                       BindingResult bindingResult) {
+        LOGGER.log(Level.INFO, "Receive playerCreateRequest: " + playerCreateRequest);
+        LOGGER.log(Level.INFO, "Binding result = " + bindingResult);
         return mockPlayer();
     }
 

@@ -8,25 +8,49 @@ import com.game.web.request.UrlParams;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
 
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
     public PlayerServiceImpl(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
     }
 
     @Override
-    public long getPlayersCount() {
-        return playerRepository.count();
+    public long getPlayersCount(UrlParams urlParams) {
+        return findAndFilterPlayers(urlParams).count();
     }
 
     @Override
     public List<Player> getAllPlayers(UrlParams urlParams) {
+        return findAndFilterPlayers(urlParams)
+                .sorted((p1, p2) -> {
+                    if (urlParams.getOrder() == PlayerOrder.NAME) {
+                        return String.CASE_INSENSITIVE_ORDER.compare(p1.getName(), p2.getName());
+                    } else if (urlParams.getOrder() == PlayerOrder.EXPERIENCE) {
+                        return Long.compare(p1.getExperience(), p2.getExperience());
+                    } else if (urlParams.getOrder() == PlayerOrder.BIRTHDAY) {
+                        return (p1.getBirthday().compareTo(p2.getBirthday()));
+                    } else {
+                        return Long.compare(p1.getId(), p2.getId());
+                    }
+                })
+                .skip((long) urlParams.getPageSize() * urlParams.getPageNumber())
+                .limit(urlParams.getPageSize())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Player createPlayer(Player player) {
+
+        return null;
+    }
+
+    private Stream<Player> findAndFilterPlayers(UrlParams urlParams) {
         return playerRepository.findAll().stream()
                 .filter(player -> {
                     boolean isCorresponds = true;
@@ -64,20 +88,6 @@ public class PlayerServiceImpl implements PlayerService {
                         isCorresponds = player.getLevel() <= urlParams.getMaxLevel();
                     }
                     return  isCorresponds;
-                })
-                .sorted((p1, p2) -> {
-                    if (urlParams.getOrder() == PlayerOrder.NAME) {
-                        return String.CASE_INSENSITIVE_ORDER.compare(p1.getName(), p2.getName());
-                    } else if (urlParams.getOrder() == PlayerOrder.EXPERIENCE) {
-                        return Long.compare(p1.getExperience(), p2.getExperience());
-                    } else if (urlParams.getOrder() == PlayerOrder.BIRTHDAY) {
-                        return (p1.getBirthday().compareTo(p2.getBirthday()));
-                    } else {
-                        return Long.compare(p1.getId(), p2.getId());
-                    }
-                })
-                .skip((long) urlParams.getPageSize() * urlParams.getPageNumber())
-                .limit(urlParams.getPageSize())
-                .collect(Collectors.toList());
+                });
     }
 }

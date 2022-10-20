@@ -2,10 +2,15 @@ package com.game.web.request;
 
 import com.game.entity.enums.Profession;
 import com.game.entity.enums.Race;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+
+
 @Data
-public class PlayerRequest {
+public class PlayerCreateRequest {
+
     String name;
 
     String title;
@@ -14,9 +19,10 @@ public class PlayerRequest {
 
     Profession profession;
 
+    @NotNull
     Long birthday;
 
-    Boolean banned;
+    Boolean banned = true;
 
     Integer experience;
 }
