@@ -16,8 +16,6 @@ import java.util.Date;
 @Table(name = "player", schema = "rpg")
 public class Player {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-    @SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 100)
     private long id;
 
     @Column(name = "name")

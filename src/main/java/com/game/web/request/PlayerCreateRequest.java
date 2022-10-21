@@ -5,10 +5,7 @@ import com.game.entity.enums.Race;
 
 import lombok.Data;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 
 @Data
@@ -29,6 +26,7 @@ public class PlayerCreateRequest {
     Profession profession;
 
     @NotNull
+    @Min(0)
     Long birthday;
 
     Boolean banned = false;

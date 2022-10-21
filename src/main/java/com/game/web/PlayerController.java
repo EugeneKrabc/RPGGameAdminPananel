@@ -58,7 +58,8 @@ public class PlayerController {
     @PostMapping
     public PlayerResponse createPlayer(@RequestBody @Validated PlayerCreateRequest playerCreateRequest) {
         LOGGER.log(Level.INFO, "Receive playerCreateRequest: " + playerCreateRequest);
-        return mockPlayer();
+        return playerMapper.playerToPlayerResponse(
+                playerService.createPlayer(playerMapper.playerCreateRequestToPlayer(playerCreateRequest)));
     }
 
     @PutMapping({"/id"})

@@ -46,8 +46,13 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player createPlayer(Player player) {
+        int exp = player.getExperience();
+        int level = (int)(Math.sqrt(2500 + 200 * exp) - 50) / 100;
+        int untilNextLevel = 50 * (level + 1) * (level + 2) - exp;
 
-        return null;
+        player.setLevel(level);
+        player.setUntilNextLevel(untilNextLevel);
+        return playerRepository.save(player);
     }
 
     private Stream<Player> findAndFilterPlayers(UrlParams urlParams) {
