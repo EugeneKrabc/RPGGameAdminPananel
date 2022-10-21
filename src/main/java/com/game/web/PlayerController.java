@@ -8,9 +8,8 @@ import com.game.web.request.PlayerCreateRequest;
 import com.game.web.request.UrlParams;
 import com.game.web.response.PlayerResponse;
 
-import jakarta.validation.Valid;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,10 +56,8 @@ public class PlayerController {
     }
 
     @PostMapping
-    public PlayerResponse createPlayer(@RequestBody @Valid PlayerCreateRequest playerCreateRequest,
-                                       BindingResult bindingResult) {
+    public PlayerResponse createPlayer(@RequestBody @Validated PlayerCreateRequest playerCreateRequest) {
         LOGGER.log(Level.INFO, "Receive playerCreateRequest: " + playerCreateRequest);
-        LOGGER.log(Level.INFO, "Binding result = " + bindingResult);
         return mockPlayer();
     }
 
