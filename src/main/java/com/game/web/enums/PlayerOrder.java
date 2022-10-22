@@ -1,4 +1,4 @@
-package com.game.web;
+package com.game.web.enums;
 
 public enum PlayerOrder {
     ID("id"), // default

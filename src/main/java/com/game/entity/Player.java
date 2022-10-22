@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name = "player", schema = "rpg")
 public class Player {
     @Id
-    private long id;
+    Long id;
 
     @Column(name = "name")
     String name;
@@ -36,14 +36,14 @@ public class Player {
     Date birthday;
 
     @Column(name = "experience")
-    int experience;
+    Integer experience;
 
     @Column(name = "level")
-    int level;
+    Integer level;
 
     @Column(name = "untilNextLevel")
-    int untilNextLevel;
+    Integer untilNextLevel;
 
     @Column(name = "banned")
-    boolean banned;
+    Boolean banned;
 }

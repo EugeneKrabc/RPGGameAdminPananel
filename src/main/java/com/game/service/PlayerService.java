@@ -12,4 +12,10 @@ public interface PlayerService {
     List<Player> getAllPlayers(UrlParams urlParams);
 
     Player createPlayer(Player player);
+
+    Player getPlayerById(Long id);
+
+    Player updatePlayer(Long id, Player dataToUpdate);
+
+    void deletePlayer(Long id);
 }

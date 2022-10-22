@@ -2,10 +2,8 @@ package com.game.web.request;
 
 import com.game.entity.enums.Profession;
 import com.game.entity.enums.Race;
-import com.game.web.PlayerOrder;
+import com.game.web.enums.PlayerOrder;
 import lombok.Data;
-
-import java.util.Date;
 
 @Data
 public class UrlParams {

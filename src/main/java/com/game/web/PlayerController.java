@@ -5,6 +5,7 @@ import com.game.entity.enums.Race;
 import com.game.mapper.PlayerMapper;
 import com.game.service.PlayerService;
 import com.game.web.request.PlayerCreateRequest;
+import com.game.web.request.PlayerUpdateRequest;
 import com.game.web.request.UrlParams;
 import com.game.web.response.PlayerResponse;
 
@@ -13,7 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,39 +49,35 @@ public class PlayerController {
 
     @GetMapping("/count")
     public long getPlayersCount(UrlParams urlParams) {
+        LOGGER.log(Level.INFO, "Receive get player count request: " + urlParams);
         return playerService.getPlayersCount(urlParams);
     }
 
     @GetMapping("/{id}")
-    public PlayerResponse getPlayerById(@PathVariable long id) {
-        return mockPlayer();
+    public PlayerResponse getPlayerById(@PathVariable @Min(1) long id) {
+        LOGGER.log(Level.INFO, "Receive get player by id request, id = " + id);
+        return playerMapper.playerToPlayerResponse(playerService.getPlayerById(id));
     }
 
     @PostMapping
     public PlayerResponse createPlayer(@RequestBody @Validated PlayerCreateRequest playerCreateRequest) {
-        LOGGER.log(Level.INFO, "Receive playerCreateRequest: " + playerCreateRequest);
+        LOGGER.log(Level.INFO, "Receive player create request: " + playerCreateRequest);
         return playerMapper.playerToPlayerResponse(
                 playerService.createPlayer(playerMapper.playerCreateRequestToPlayer(playerCreateRequest)));
     }
 
-    @PutMapping({"/id"})
-    public PlayerResponse updatePlayer(@PathVariable long id) {
-        return mockPlayer();
+    @PutMapping("/{id}")
+    public PlayerResponse updatePlayer(@PathVariable @Min(1) Long id,
+                                       @RequestBody @Valid PlayerUpdateRequest playerUpdateRequest) {
+        LOGGER.log(Level.INFO, "Receive player update request: " + playerUpdateRequest);
+        return playerMapper.playerToPlayerResponse(
+                playerService.updatePlayer(id, playerMapper.playerUpdateRequestToPlayer(playerUpdateRequest)));
     }
 
-    private Comparator<PlayerResponse>  idComparator = (p1, p2) -> 0;
-
-    private PlayerResponse mockPlayer() {
-        PlayerResponse mock = new PlayerResponse();
-        mock.setId(123);
-        mock.setName("some name");
-        mock.setTitle("Some title");
-        mock.setRace(Race.HUMAN);
-        mock.setProfession(Profession.WARLOCK);
-        mock.setExperience(12345);
-        mock.setLevel(3);
-        mock.setUntilNextLevel(123);
-        mock.setBanned(false);
-        return mock;
+    @DeleteMapping("/{id}")
+    public void deletePlayer(@PathVariable @Min(1) Long id) {
+        LOGGER.log(Level.INFO, "Receive delete player request: " + id);
+        playerService.deletePlayer(id);
     }
+
 }

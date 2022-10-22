@@ -107,6 +107,22 @@ function post(requestUrl, body) {
     return Httpreq;
 }
 
+function put(requestUrl, body) {
+    let Httpreq = new XMLHttpRequest(); // a new request
+    Httpreq.open("PUT", requestUrl, false);
+    Httpreq.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+    Httpreq.send(body);
+    if (Httpreq.status === 400) {
+        $('#error-text').text("Bad request to POST " + requestUrl);
+        $('#myModal').modal('show');
+    }
+    if (Httpreq.status === 404) {
+        $('#error-text').text("Not found POST " + requestUrl);
+        $('#myModal').modal('show');
+    }
+    return Httpreq;
+}
+
 function Delete(requestUrl) {
     let Httpreq = new XMLHttpRequest(); // a new request
     Httpreq.open("DELETE", requestUrl, false);
@@ -369,7 +385,7 @@ function sendUpdate(root, id) {
     body.banned = banned !== "active";
     body.experience = document.getElementById("updateExperience" + id).value;
 
-    post(root + "/rest/players/" + id, JSON.stringify(body));
+    put(root + "/rest/players/" + id, JSON.stringify(body));
     loadContent(root, "", 1);
 }
 
