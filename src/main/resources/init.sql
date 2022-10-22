@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS rpg
-    COLLATE utf8mb4_unicode_ci;
+    COLLATE utf8_general_ci;
 CREATE DATABASE IF NOT EXISTS test
-    COLLATE utf8mb4_unicode_ci;
+    COLLATE utf8_general_ci;
 
 USE rpg;
 
@@ -10,8 +10,8 @@ DROP TABLE IF EXISTS player;
 CREATE TABLE player
 (
     id             BIGINT(20)  NOT NULL AUTO_INCREMENT,
-    name           VARCHAR(255) NULL,
-    title          VARCHAR(60) NULL,
+    name           VARCHAR(12) NULL,
+    title          VARCHAR(30) NULL,
     race           VARCHAR(20) NULL,
     profession     VARCHAR(20) NULL,
     birthday       DATE        NULL,
