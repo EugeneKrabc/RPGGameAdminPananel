@@ -29,6 +29,13 @@ public class ControllerExceptionHandler {
                 .body(new ErrorWebResponce("Bad request: " + e.getMessage()));
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NotValidFieldException.class)
+    public ResponseEntity<ErrorWebResponce> handleConstraintException(@NonNull NotValidFieldException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorWebResponce("Bad request: " + e.getMessage()));
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ErrorWebResponce> handleNotFoundExcepton(@NonNull NoSuchElementException e) {

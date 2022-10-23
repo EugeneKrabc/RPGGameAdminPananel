@@ -32,5 +32,7 @@ public class PlayerCreateRequest {
     Boolean banned = false;
 
     @NotNull
+    @Min(0)
+    @Max(10000000)
     Integer experience;
 }

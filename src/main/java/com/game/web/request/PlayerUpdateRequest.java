@@ -3,19 +3,17 @@ package com.game.web.request;
 import com.game.entity.enums.Profession;
 import com.game.entity.enums.Race;
 import lombok.Data;
+import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Data
 public class PlayerUpdateRequest {
 
-    @NotEmpty
     @Size(max = 12)
     String name;
 
-    @NotEmpty
     @Size(max = 12)
     String title;
 
@@ -27,5 +25,7 @@ public class PlayerUpdateRequest {
 
     Boolean banned;
 
+    @Min(0)
+    @Max(10000000)
     Integer experience;
 }
