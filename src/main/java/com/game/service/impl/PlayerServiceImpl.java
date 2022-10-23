@@ -4,9 +4,12 @@ import com.game.entity.Player;
 import com.game.repository.PlayerRepository;
 import com.game.service.PlayerService;
 import com.game.web.enums.PlayerOrder;
+import com.game.web.handler.NotValidFieldException;
 import com.game.web.request.UrlParams;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -70,9 +73,15 @@ public class PlayerServiceImpl implements PlayerService {
     public Player updatePlayer(Long id, Player newData) {
         Player playerToUpdate = getPlayerById(id);
         if (newData.getName() != null) {
+            if (newData.getName().isBlank()) {
+                throw new NotValidFieldException("Name must not be blank");
+            }
             playerToUpdate.setName(newData.getName());
         }
         if (newData.getTitle() != null) {
+            if (newData.getTitle().isBlank()) {
+                throw new NotValidFieldException("Title must not be blank");
+            }
             playerToUpdate.setTitle(newData.getTitle());
         }
         if (newData.getRace() != null) {
@@ -82,6 +91,9 @@ public class PlayerServiceImpl implements PlayerService {
             playerToUpdate.setProfession(newData.getProfession());
         }
         if (newData.getBirthday() != null) {
+            if (newData.getBirthday().getTime() < 0) {
+                throw new NotValidFieldException("Birthday field is not valid");
+            }
             playerToUpdate.setBirthday(newData.getBirthday());
         }
         if (newData.getBanned() != null) {
