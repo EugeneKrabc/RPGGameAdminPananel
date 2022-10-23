@@ -3,10 +3,10 @@
 
 *Реализовано:*
 Поиск игроков по фильтру с различными параметрами, постраничная навигация по выданным результатам,
-создание, удаление, редактирование. 
+создание, удаление, редактирование. Также имееются  end to end тесты контроллера.
 
 *Используемый стек:*
-Spring MVC, Spring Data JPA, MySQL.
+Spring MVC, Spring Data JPA, MySQL, JUnit.
 <br /> <br />
 <p align="center">
     <img src="misc/example.png" alt="Example" width="600" >
